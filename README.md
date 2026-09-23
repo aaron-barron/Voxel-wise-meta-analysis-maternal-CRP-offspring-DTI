@@ -1,0 +1,8 @@
+This repository contains all R code for a consortium project within the Brain Birth Cohort Consortium, a collaboration of European birth cohorts studying the relationship between maternal and child inflammation and brain structure. This project examined the association between maternal C-reactive protein and offspring white matter structure and involved implementation of a voxel-wise meta-analysis.
+
+The R script all_meta_analysis.R includes all (parallelised) code to run the meta-analysis. The starting point for this code is two dataframes of rows = sites/studies x columns = voxels; the first dataframe should contain effect sizes, and the second should contain their errors. This does not necessarily need to be parallelised. However, to loop this over all voxels will take an estimated 2 hours per model. So, it was run in parallel using a foreach loop and the %dopar% operator to run over 39 cores with the resources of the Puhti high-performance computing environment of IT Center for Science, Finland (CSC). (Puhti was superseded in July 2026 by a new high-performance computer, Roihu). Each model took an estimated 3 minutes to run. The script ROI_meta_analysis.R is very similar but instead implements a simple for loop to apply the meta-analysis at the level of ROI means rather than at voxel level. The scripts metagen_results.R and ROI_results.R for visualising the results of these scripts.
+
+To estimate the effective number of independent tests (meff), for adjustment of p-values to account for multiple testing across voxels:
+#1 Correlation matrix FA.R estimates a dense correlation matrix of FA in every voxel of your sample.
+#2 RSpectra FA.R estimates the full eigenspectrum of this correlation matrix, and uses this to estimate meff.
+
